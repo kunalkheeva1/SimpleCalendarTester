@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.GregorianCalendar;
-//-------------------------------------
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,10 +20,7 @@ import javax.swing.event.ChangeListener;
     private String archiveFile;// for the file that we may need to save
 
 
-    /**constructor
-     * set up instant variables
-     * initialize current month and date
-     */
+
     public CalendarConfiguration() {
         calendar = new GregorianCalendar();
         listeners = new ArrayList<ChangeListener>();
@@ -35,18 +30,12 @@ import javax.swing.event.ChangeListener;
         currYear = calendar.get(java.util.Calendar.YEAR);
         archiveFile = "events.txt";
     }
-    /**Attach the view/listener to the model
-     * @param aListener add to the ArrayList of listeners
-     */
+
     public void attachView(ChangeListener aListener) {
         listeners.add(aListener);
     }
 
-    /**set the date with the given date
-     * mutator
-     * has to notify listeners
-     * @param aDate
-     */
+
     public void setDate(String aDate) {
         if(aDate != null)
         {
@@ -57,11 +46,7 @@ import javax.swing.event.ChangeListener;
             }
         }
     }
-    /**Update the time and date based on the passed in value
-     * performed by a button in the GUI
-     * @param dayChange
-     * @param monthChange
-     */
+
     public void buttonUpdate(int dayChange, int monthChange) {
         //calculate the newly "created" month and date change
         calendar.add(java.util.Calendar.DAY_OF_MONTH, dayChange);
@@ -72,11 +57,7 @@ import javax.swing.event.ChangeListener;
             l.stateChanged(new ChangeEvent(this));
         }
     }
-    /**change the value of month and date based on mouse clicking
-     * basically the same as above
-     * @param dayChange
-     * @param monthChange
-     */
+
     public void clickUpdate(int dayChange, int monthChange) {
         calendar.set(java.util.Calendar.DAY_OF_MONTH, dayChange);
         calendar.set(java.util.Calendar.DAY_OF_MONTH, monthChange);
@@ -85,10 +66,7 @@ import javax.swing.event.ChangeListener;
         }
     }
 
-    /**check whether or not we can find that event
-     * @param date
-     * @return if found --> return true
-     */
+
     public boolean hasEvent(String date) {
         for(int i = 0; i < eventList.size(); i++) {
             if(eventList.get(i).getDateStr().equalsIgnoreCase(date)) {
@@ -159,9 +137,7 @@ import javax.swing.event.ChangeListener;
 
         return objStr.toString();
     }
-    /**Using serialization to save events to events.txt
-     * @throws IOException
-     */
+
     public void saveEvents() throws IOException {
         ObjectOutputStream writeSer = new ObjectOutputStream(new FileOutputStream(archiveFile));
         writeSer.writeInt(eventList.size());// write how many events we might have
@@ -169,12 +145,7 @@ import javax.swing.event.ChangeListener;
             writeSer.writeObject(eventList.get(i));// write each of the event objects to the events.txt
         writeSer.close();
     }
-    /**Load the event back using serialization
-     * Load from the events.txt
-     * @throws IOException
-     * @throws ParseException
-     * @throws ClassNotFoundException
-     */
+
     public void loadEvents() throws IOException, ParseException, ClassNotFoundException {
         File input = new File(archiveFile);
         if(input.exists()) //if the file exists
@@ -189,15 +160,7 @@ import javax.swing.event.ChangeListener;
             readSer.close();
         }
     }
-    /**Mutator method to modify the calendar--> add event into the calendar
-     *
-     * @param title name of the event
-     * @param date date of the event
-     * @param starting starting time
-     * @param ending ending time
-     * @return
-     * @throws ParseException
-     */
+
     public String addEvent(String title, String date, String starting, String ending) throws ParseException {
         StringBuffer timeConvert = new StringBuffer();
         if(starting.charAt(5) == 'p') {
@@ -236,10 +199,7 @@ import javax.swing.event.ChangeListener;
         }
         return null;
     }
-    /**delete selected event
-     * @param aDate
-     * @param starting
-     */
+
     public void deleteSelectEve(String aDate, String starting) {
         for(int i = 0; i < eventList.size(); i++) {
             if(eventList.get(i).getDateStr().equalsIgnoreCase(aDate) && eventList.get(i).getStarting().equalsIgnoreCase(starting)) {
@@ -250,10 +210,7 @@ import javax.swing.event.ChangeListener;
             }
         }
     }
-    /**delete specific event in the Array list
-     *
-     * @param date
-     */
+
     public void deleteEvent(String date)
     {
         for(int i = 0; i <eventList.size(); i++)
