@@ -22,7 +22,7 @@ public class GUI {
     public GUI() throws ClassNotFoundException, IOException, ParseException
     {
         JFrame calendarFrame = new JFrame("Calendar Application");
-        Calendar modelCalendar = new Calendar();
+        CalendarConfiguration modelCalendar = new CalendarConfiguration();
         modelCalendar.loadEvents();
         MonthView monthView = new MonthView(calendarFrame, FRAME_WIDTH, FRAME_HEIGHT, OFFSET, modelCalendar);
         DayView dayView = new DayView(FRAME_WIDTH, FRAME_HEIGHT, modelCalendar);

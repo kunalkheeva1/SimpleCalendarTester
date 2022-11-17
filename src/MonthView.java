@@ -14,18 +14,11 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-/**Monthview is a JPanel GUI 
- *
- * @author minhngo
- *
- */
+
 public class MonthView extends JPanel implements ChangeListener {
-    /** Class MonthView to draw the GUI part of the month calendar
-     *
-     */
 
 
-    public MonthView(JFrame closeFrame, int frameWidth, int frameHeight, int offSet, Calendar modelCalendar) {
+    public MonthView(JFrame closeFrame, int frameWidth, int frameHeight, int offSet, CalendarConfiguration modelCalendar) {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.offSet = offSet;
@@ -149,10 +142,7 @@ public class MonthView extends JPanel implements ChangeListener {
         delBut.setOpaque(true);
         delBut.setBorderPainted(false);
         buttonPanel.add(delBut);
-        /**
-         * This part is to create a dialog panel for the input --> deleteButton
-         * so that we can get the input and remove it with enough information
-         */
+
         delBut.addActionListener(new ActionListener()
         {
             @Override
@@ -359,7 +349,7 @@ public class MonthView extends JPanel implements ChangeListener {
     private int presentYear;
     private int currDatePos;
     // reference to the model is here
-    private Calendar modelCalendar;
+    private CalendarConfiguration modelCalendar;
     private JFrame closeFrame;
     private JButton [] calBut; //array of JButton for calendar/date
     private JTextField dateStr;

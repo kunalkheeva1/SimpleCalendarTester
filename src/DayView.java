@@ -15,13 +15,13 @@ public class DayView extends JPanel implements ChangeListener {
     private static final long serialVersionUID = 1L;
     private int frameWidth;
     private int frameHeight;
-    private Calendar modelCalendar;
+    private CalendarConfiguration modelCalendar;
     private JTextField dateField;
     private JTextArea eventListArea;
     private DAYS [] day;
     private MONTHS [] month;
 
-    public DayView(int frameWidth, int frameHeight, Calendar modelCalendar) {
+    public DayView(int frameWidth, int frameHeight, CalendarConfiguration modelCalendar) {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.modelCalendar = modelCalendar;
@@ -43,18 +43,18 @@ public class DayView extends JPanel implements ChangeListener {
         JScrollPane eventListScroll = new JScrollPane(eventListArea);
         viewPanel.add(dateField, BorderLayout.NORTH);
         viewPanel.add(eventListScroll, BorderLayout.CENTER);
-        populate();
+        occupy();
 
         this.add(viewPanel);
     }
 
-    private void populate() {
+    private void occupy() {
         dateField.setText(day[modelCalendar.actualDayOfWeek() - 1].toString() + ", " + month[modelCalendar.actualMonth()].toString() + ' ' + modelCalendar.actualDate() + ", " + modelCalendar.actualYear());
         eventListArea.setText(modelCalendar.getEventList());
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        populate();
+        occupy();
     }
 }
