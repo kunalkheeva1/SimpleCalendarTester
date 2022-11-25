@@ -184,29 +184,6 @@ public class MonthView extends JPanel implements ChangeListener {
         });
         buttonPnl.add(jNextButton);
 
-
-//        JButton upperJButton = new JButton("Up");
-//        upperJButton.setPreferredSize(new Dimension((int)bottom_And_Upside_pnl.getPreferredSize().getWidth() - offSet / 2, (int)bottom_And_Upside_pnl.getPreferredSize().getHeight() / 2 - offSet));
-//        upperJButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(null);
-//                modelCalendar.buttonUpdate(0, -1);
-//            }
-//        });
-//        bottom_And_Upside_pnl.add(upperJButton);
-//
-//        JButton jBottomButton = new JButton("Bottom");
-//        jBottomButton.setPreferredSize(new Dimension((int)bottom_And_Upside_pnl.getPreferredSize().getWidth() - offSet / 2, (int)bottom_And_Upside_pnl.getPreferredSize().getHeight() / 2 - offSet));
-//        jBottomButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(null);
-//                modelCalendar.buttonUpdate(0, 1);
-//            }
-//        });
-//        bottom_And_Upside_pnl.add(jBottomButton);
-
         dateString.setPreferredSize(new Dimension((int)calendarPaneContent.getPreferredSize().getWidth() - offSet / 3, (int)calendarPaneContent.getPreferredSize().getHeight() / 8 - offSet / 3));
         dateString.setEditable(false);
         dateString.setHorizontalAlignment(JTextField.CENTER);
