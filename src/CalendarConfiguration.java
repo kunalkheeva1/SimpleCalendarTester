@@ -21,7 +21,9 @@ class CalendarConfiguration {
     private String archiveFile;
 
 
-
+    /**
+     *  CalendarConfiguration constructor
+     */
     public CalendarConfiguration() {
         calendar = new GregorianCalendar();
         listeners = new ArrayList<ChangeListener>();
@@ -36,6 +38,11 @@ class CalendarConfiguration {
         listeners.add(l);
     }
 
+    /**
+     * Method to set the dates
+     * @param aDate
+     * - String parameter as the date
+     */
     public void setDate(String aDate) {
         if(aDate != null)
         {
@@ -47,6 +54,15 @@ class CalendarConfiguration {
         }
     }
 
+    /**
+     * method to update the button
+     * @param dayChange
+     * - value to change the day.
+     * condition- It must be integer only
+     * @param monthChange
+     * - value to change the month.
+     * condition - It must be integer only.
+     */
     public void buttonUpdate(int dayChange, int monthChange) {
 
         calendar.add(java.util.Calendar.DAY_OF_MONTH, dayChange);
@@ -59,7 +75,14 @@ class CalendarConfiguration {
     }
 
 
-
+    /**
+     * Method to check the if two dates are overlapping
+     * @param currDate
+     * - current date as parameter
+     * - condition- It must be string.
+     * @return
+     * True or false with respect to the overlapping conditions.
+     */
     public boolean checkEvent(String currDate) {
         for(int i = 0; i < eventList.size(); i++) {
             if(eventList.get(i).getDateStr().equalsIgnoreCase(currDate)) {
@@ -150,6 +173,20 @@ class CalendarConfiguration {
         }
     }
 
+    /**
+     * Method to add the event
+     * @param title
+     * - title as the name of the event.
+     * @param date
+     * - date of the event.
+     * @param starting
+     * - starting date of the event.
+     * @param ending
+     * - ending date of the event.
+     * @return
+     * Sring of the added event will be returned
+     * @throws ParseException
+     */
     public String addEvent(String title, String date, String starting, String ending) throws ParseException {
         StringBuffer timeChange = new StringBuffer();
         if(starting.charAt(5) == 'p') {
@@ -187,16 +224,5 @@ class CalendarConfiguration {
             l.stateChanged(new ChangeEvent(this));
         }
         return null;
-    }
-
-    public void deleteChosenEvent(String aDate, String starting) {
-        for(int i = 0; i < eventList.size(); i++) {
-            if(eventList.get(i).getDateStr().equalsIgnoreCase(aDate) && eventList.get(i).getBeginning().equalsIgnoreCase(starting)) {
-                eventList.remove(i);
-                for (ChangeListener l : listeners) {
-                    l.stateChanged(new ChangeEvent(this));
-                }
-            }
-        }
     }
 }

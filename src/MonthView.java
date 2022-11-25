@@ -16,7 +16,20 @@ import javax.swing.event.ChangeListener;
 
 public class MonthView extends JPanel implements ChangeListener {
 
-
+    /**
+     * Month view constructor
+     * @param closeFrame
+     * - For the frame, reference of the JFrame
+     * @param frameBreadth
+     * - Refering to the breadth of the frame.
+     * @param frameLength
+     * - Referring to the length of the frame.
+     * @param offSet
+     * -  maintain the off set with respect to the frame
+     * - condition-must be an integer
+     * @param modelCalendar
+     * CalendarConfiguration that is maintaining has- a relationship
+     */
     public MonthView(JFrame closeFrame, int frameBreadth, int frameLength, int offSet, CalendarConfiguration modelCalendar) {
         this.frameBreadth = frameBreadth;
         this.frameLength = frameLength;
@@ -33,7 +46,9 @@ public class MonthView extends JPanel implements ChangeListener {
         draw();
     }
 
-
+    /**
+     * Draw method
+     */
     private void draw() {
         String [] weekDay = {"Su", "M", "T", "W", "Th", "F", "Sa"};
 
@@ -57,14 +72,16 @@ public class MonthView extends JPanel implements ChangeListener {
         bottom_And_Upside_pnl.setPreferredSize(new Dimension((int)calendarPanel.getPreferredSize().getWidth() / 6 - offSet, (int)calendarPanel.getPreferredSize().getHeight() * 3 / 4 - offSet));
         bottom_And_Upside_pnl.setBorder(BorderFactory.createLineBorder(Color.darkGray));
         calendarPanel.add(bottom_And_Upside_pnl);
-        // Create add/ "create" button to add event
-        // attach listener to it
+        // Create add button to create  the events
+        // attaching the listeners to it.
         JButton jNewButton = new JButton("Create");
         jNewButton.setForeground(Color.white);
         jNewButton.setBackground(Color.RED);
         jNewButton.setOpaque(true);
         jNewButton.setBorderPainted(false);
         jNewButton.setPreferredSize(new Dimension((int)buttonPnl.getPreferredSize().getWidth() / 4 - offSet, (int)buttonPnl.getPreferredSize().getHeight() / 2));
+
+        //adding action listener to the button
         jNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -241,6 +258,10 @@ public class MonthView extends JPanel implements ChangeListener {
         }
     }
 
+    /**
+     * Maintains the change event objects
+     * @param e  a ChangeEvent object
+     */
     @Override
     public void stateChanged(ChangeEvent e) {
         if(todayMonth != modelCalendar.actualMonth()) {

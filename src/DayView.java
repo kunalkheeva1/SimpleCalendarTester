@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+
 public class DayView extends JPanel implements ChangeListener {
 
 //    private static final long SERIAL_VERSION_UID = 1L;
@@ -21,6 +22,15 @@ public class DayView extends JPanel implements ChangeListener {
     private DAYS [] day;
     private MONTHS [] month;
 
+    /**
+     * DayView constructor
+     * @param frameBreadth
+     * - breadth of the frame since its a rectangle shape
+     * @param frameLength
+     * - length of the frame.
+     * @param modelCalendar
+     * - object referring ot the CalendarConfiguration
+     */
     public DayView(int frameBreadth, int frameLength, CalendarConfiguration modelCalendar) {
         this.frameBreadth = frameBreadth;
         this.frameLength = frameLength;

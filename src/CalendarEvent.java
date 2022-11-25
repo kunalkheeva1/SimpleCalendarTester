@@ -3,6 +3,9 @@ import java.util.Date;
 import java.text.ParseException;
 import java.io.Serializable;
 
+/**
+ * class CalendarEvent is implementing Serializable
+ */
 public class CalendarEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -11,6 +14,14 @@ public class CalendarEvent implements Serializable {
     String beginning;
     String finalizing;
 
+    /**
+     * Constructor for handling
+     * @param heading -name of the event
+     * @param dateBegin -  starting date of the envent as string
+     * @param s of the event
+     * @param e event finization with accordance to the input
+     * @throws ParseException
+     */
     public CalendarEvent(String heading, String dateBegin, String s, String e) throws ParseException {
         this.heading = heading;
         SimpleDateFormat format = new SimpleDateFormat("M/d/yyyy");
@@ -42,6 +53,11 @@ public class CalendarEvent implements Serializable {
         return finalizing;
     }
 
+    /**
+     * method for object initializing
+     * @return
+     * String for the object easiness.
+     */
     public String toString() {
         StringBuffer objStr = new StringBuffer();
         StringBuffer startingConvert = new StringBuffer();
