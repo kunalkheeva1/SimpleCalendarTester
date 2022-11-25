@@ -59,12 +59,3 @@ public class DayView extends JPanel implements ChangeListener {
     }
 }
 
-/*
- public void clickUpdate(int dayChange, int monthChange) {
-        calendar.set(java.util.Calendar.DAY_OF_MONTH, dayChange);
-        calendar.set(java.util.Calendar.DAY_OF_MONTH, monthChange);
-        for (ChangeListener l : listeners) {
-            l.stateChanged(new ChangeEvent(this));
-        }
-    }
- */

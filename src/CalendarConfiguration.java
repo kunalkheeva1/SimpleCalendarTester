@@ -36,12 +36,11 @@ class CalendarConfiguration {
         listeners.add(l);
     }
 
-
     public void setDate(String aDate) {
         if(aDate != null)
         {
             calendar.set(java.util.Calendar.DAY_OF_MONTH, Integer.parseInt(aDate));
-            for (ChangeListener l : listeners) //notify
+            for (ChangeListener l : listeners)
             {
                 l.stateChanged(new ChangeEvent(this));
             }
@@ -78,25 +77,7 @@ class CalendarConfiguration {
         return firstDayOfWeek;
     }
 
-    public int lastDayOfMonth()
-    {
-        return calendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-    }
 
-//    public int currentDate()
-//    {
-//        return this.currDate;
-//    }
-
-    public int currentMonth()
-    {
-        return this.currMonth;
-    }
-
-    public int currentYear()
-    {
-        return this.currYear;
-    }
 
     public int actualDayOfWeek()
     {
@@ -110,6 +91,20 @@ class CalendarConfiguration {
     public int actualMonth()
     {
         return calendar.get(java.util.Calendar.MONTH);
+    }
+    public int lastDayOfMonth()
+    {
+        return calendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+    }
+
+    public int currentMonth()
+    {
+        return this.currMonth;
+    }
+
+    public int currentYear()
+    {
+        return this.currYear;
     }
 
     public int actualYear()
@@ -204,15 +199,4 @@ class CalendarConfiguration {
             }
         }
     }
-//
-//    public void deleteEvent(String date)
-//    {
-//        for(int i = 0; i <eventList.size(); i++)
-//        {
-//            if(eventList.get(i).getDateStr().equalsIgnoreCase(date))
-//            {
-//                eventList.remove(i);
-//            }
-//        }
-//    }
 }

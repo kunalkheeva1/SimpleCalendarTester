@@ -19,13 +19,6 @@ public class CalendarEvent implements Serializable {
         this.finalizing = e;
     }
 
-//    public String getHeading() {
-//        return heading;
-//    }
-//
-//    public void setHeading(String heading) {
-//        this.heading = heading;
-//    }
 
 
 
@@ -40,37 +33,14 @@ public class CalendarEvent implements Serializable {
         return format.format(dateBegin);
     }
 
-//    public void setDateBegin(Date dateBegin) {
-//        this.dateBegin = dateBegin;
-//    }
-
     public String getBeginning() {
         return beginning;
     }
-//
-//    public void setBeginning(String beginning) {
-//        this.beginning = beginning;
-//    }
 
 
     public String getFinalizing() {
         return finalizing;
     }
-
-
-//    public void setFinalizing(String finalizing) {
-//        this.finalizing = finalizing;
-//    }
-//
-//
-//    public CalendarEvent() {
-//        heading = null;
-//        dateBegin = null;
-//        beginning = null;
-//        finalizing = null;
-//    }
-
-
 
     public String toString() {
         StringBuffer objStr = new StringBuffer();
