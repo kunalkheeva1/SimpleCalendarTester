@@ -12,49 +12,59 @@ import javax.swing.event.ChangeListener;
 
 public class DayView extends JPanel implements ChangeListener {
 
-    private static final long serialVersionUID = 1L;
-    private int frameWidth;
-    private int frameHeight;
+//    private static final long SERIAL_VERSION_UID = 1L;
+    private int frameBreadth;
+    private int frameLength;
     private CalendarConfiguration modelCalendar;
-    private JTextField dateField;
+    private JTextField jDateArea;
     private JTextArea eventListArea;
     private DAYS [] day;
     private MONTHS [] month;
 
-    public DayView(int frameWidth, int frameHeight, CalendarConfiguration modelCalendar) {
-        this.frameWidth = frameWidth;
-        this.frameHeight = frameHeight;
+    public DayView(int frameBreadth, int frameLength, CalendarConfiguration modelCalendar) {
+        this.frameBreadth = frameBreadth;
+        this.frameLength = frameLength;
         this.modelCalendar = modelCalendar;
         this.day = DAYS.values();
         this.month = MONTHS.values();
-        dateField = new JTextField();
+        jDateArea = new JTextField();
         eventListArea = new JTextArea();
         drawPanel();
     }
 
-    public void drawPanel() {
-        JPanel viewPanel = new JPanel();
-        viewPanel.setPreferredSize(new Dimension(frameWidth / 2, frameHeight));
-        viewPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
-        viewPanel.setLayout(new BorderLayout());
-        dateField.setEditable(false);
-        dateField.setHorizontalAlignment(JTextField.CENTER);
-        eventListArea.setEditable(false);
-        JScrollPane eventListScroll = new JScrollPane(eventListArea);
-        viewPanel.add(dateField, BorderLayout.NORTH);
-        viewPanel.add(eventListScroll, BorderLayout.CENTER);
-        occupy();
-
-        this.add(viewPanel);
-    }
-
-    private void occupy() {
-        dateField.setText(day[modelCalendar.actualDayOfWeek() - 1].toString() + ", " + month[modelCalendar.actualMonth()].toString() + ' ' + modelCalendar.actualDate() + ", " + modelCalendar.actualYear());
+    private void inhabitFilling() {
+        jDateArea.setText(day[modelCalendar.actualDayOfWeek() - 1].toString() + ", " + month[modelCalendar.actualMonth()].toString() + ' ' + modelCalendar.actualDate() + ", " + modelCalendar.actualYear());
         eventListArea.setText(modelCalendar.getEventList());
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        occupy();
+        inhabitFilling();
+    }
+
+    public void drawPanel() {
+        JPanel viewPanel = new JPanel();
+        viewPanel.setPreferredSize(new Dimension(frameBreadth / 2, frameLength));
+        viewPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+        viewPanel.setLayout(new BorderLayout());
+        jDateArea.setEditable(false);
+        jDateArea.setHorizontalAlignment(JTextField.CENTER);
+        eventListArea.setEditable(false);
+        JScrollPane eventListScroll = new JScrollPane(eventListArea);
+        viewPanel.add(jDateArea, BorderLayout.NORTH);
+        viewPanel.add(eventListScroll, BorderLayout.CENTER);
+        inhabitFilling();
+
+        this.add(viewPanel);
     }
 }
+
+/*
+ public void clickUpdate(int dayChange, int monthChange) {
+        calendar.set(java.util.Calendar.DAY_OF_MONTH, dayChange);
+        calendar.set(java.util.Calendar.DAY_OF_MONTH, monthChange);
+        for (ChangeListener l : listeners) {
+            l.stateChanged(new ChangeEvent(this));
+        }
+    }
+ */

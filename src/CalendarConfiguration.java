@@ -13,12 +13,12 @@ import javax.swing.event.ChangeListener;
 
 class CalendarConfiguration {
     private GregorianCalendar calendar;
-    private ArrayList<ChangeListener> listeners; //ArrayList of listeners
-    private ArrayList<CalendarEvent> eventList; //data structure holding CalendarEvent
+    private ArrayList<ChangeListener> listeners;
+    private ArrayList<CalendarEvent> eventList;
     private int currDate;
     private int currMonth;
     private int currYear;
-    private String archiveFile;// for the file that we may need to save
+    private String archiveFile;
 
 
 
@@ -32,8 +32,8 @@ class CalendarConfiguration {
         archiveFile = "events.txt";
     }
 
-    public void attachView(ChangeListener aListener) {
-        listeners.add(aListener);
+    public void attach_View_Total(ChangeListener l) {
+        listeners.add(l);
     }
 
 
@@ -49,28 +49,21 @@ class CalendarConfiguration {
     }
 
     public void buttonUpdate(int dayChange, int monthChange) {
-        //calculate the newly "created" month and date change
+
         calendar.add(java.util.Calendar.DAY_OF_MONTH, dayChange);
         calendar.add(java.util.Calendar.MONTH, monthChange);
-        //notify
-        for (ChangeListener l : listeners)
+
+        for (ChangeListener listener : listeners)
         {
-            l.stateChanged(new ChangeEvent(this));
-        }
-    }
-
-    public void clickUpdate(int dayChange, int monthChange) {
-        calendar.set(java.util.Calendar.DAY_OF_MONTH, dayChange);
-        calendar.set(java.util.Calendar.DAY_OF_MONTH, monthChange);
-        for (ChangeListener l : listeners) {
-            l.stateChanged(new ChangeEvent(this));
+            listener.stateChanged(new ChangeEvent(this));
         }
     }
 
 
-    public boolean hasEvent(String date) {
+
+    public boolean checkEvent(String currDate) {
         for(int i = 0; i < eventList.size(); i++) {
-            if(eventList.get(i).getDateStr().equalsIgnoreCase(date)) {
+            if(eventList.get(i).getDateStr().equalsIgnoreCase(currDate)) {
                 return true;
             }
         }
@@ -90,10 +83,10 @@ class CalendarConfiguration {
         return calendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
     }
 
-    public int currentDate()
-    {
-        return this.currDate;
-    }
+//    public int currentDate()
+//    {
+//        return this.currDate;
+//    }
 
     public int currentMonth()
     {
@@ -141,21 +134,21 @@ class CalendarConfiguration {
 
     public void saveEvents() throws IOException {
         ObjectOutputStream writeSer = new ObjectOutputStream(new FileOutputStream(archiveFile));
-        writeSer.writeInt(eventList.size());// write how many events we might have
+        writeSer.writeInt(eventList.size());
         for(int i = 0; i < eventList.size(); i++)
-            writeSer.writeObject(eventList.get(i));// write each of the event objects to the events.txt
+            writeSer.writeObject(eventList.get(i));
         writeSer.close();
     }
 
     public void loadEvents() throws IOException, ParseException, ClassNotFoundException {
         File input = new File(archiveFile);
-        if(input.exists()) //if the file exists
+        if(input.exists())
         {
             ObjectInputStream readSer = new ObjectInputStream(new FileInputStream(input));
             int size = readSer.readInt();
-            while(size > 0) // if events exist --> size >0
+            while(size > 0)
             {
-                eventList.add((CalendarEvent)readSer.readObject());//read them back
+                eventList.add((CalendarEvent)readSer.readObject());
                 size--;
             }
             readSer.close();
@@ -163,36 +156,36 @@ class CalendarConfiguration {
     }
 
     public String addEvent(String title, String date, String starting, String ending) throws ParseException {
-        StringBuffer timeConvert = new StringBuffer();
+        StringBuffer timeChange = new StringBuffer();
         if(starting.charAt(5) == 'p') {
             for(int i = 0; i < 7; i++)
-                timeConvert.append(starting.charAt(i));
-            timeConvert.setCharAt(0, (char)(starting.charAt(0) + 1));
-            timeConvert.setCharAt(1, (char)(starting.charAt(1) + 2));
-            starting = timeConvert.toString();
+                timeChange.append(starting.charAt(i));
+            timeChange.setCharAt(0, (char)(starting.charAt(0) + 1));
+            timeChange.setCharAt(1, (char)(starting.charAt(1) + 2));
+            starting = timeChange.toString();
         }
-        timeConvert = new StringBuffer();
+        timeChange = new StringBuffer();
         if(ending.charAt(5) == 'p') {
             for(int i = 0; i < 7; i++)
-                timeConvert.append(ending.charAt(i));
-            timeConvert.setCharAt(0, (char)(ending.charAt(0) + 1));
-            timeConvert.setCharAt(1, (char)(ending.charAt(1) + 2));
-            ending = timeConvert.toString();
+                timeChange.append(ending.charAt(i));
+            timeChange.setCharAt(0, (char)(ending.charAt(0) + 1));
+            timeChange.setCharAt(1, (char)(ending.charAt(1) + 2));
+            ending = timeChange.toString();
         }
         if(starting.compareToIgnoreCase(ending) > 0)
             return "Starting time: " + starting + " > Ending time: " + ending;
         for(int i = 0; i < eventList.size(); i++) {
             if(eventList.get(i).getDateStr().compareToIgnoreCase(date) == 0)
-                if(eventList.get(i).getEnding().compareToIgnoreCase(starting) > 0 && eventList.get(i).getStarting().compareToIgnoreCase(ending) < 0)
+                if(eventList.get(i).getFinalizing().compareToIgnoreCase(starting) > 0 && eventList.get(i).getBeginning().compareToIgnoreCase(ending) < 0)
                     return "Time conflict " + eventList.get(i).toString();
         }
         this.eventList.add(new CalendarEvent(title, date, starting, ending));
         eventList.sort(new Comparator<CalendarEvent>() {
             public int compare(CalendarEvent a, CalendarEvent b) {
-                if(a.getDate().compareTo(b.getDate()) == 0) {
-                    return a.getStarting().compareToIgnoreCase(b.getStarting());
+                if(a.getDateBegin().compareTo(b.getDateBegin()) == 0) {
+                    return a.getBeginning().compareToIgnoreCase(b.getBeginning());
                 }
-                return a.getDate().compareTo(b.getDate());
+                return a.getDateBegin().compareTo(b.getDateBegin());
             }
         });
         for (ChangeListener l : listeners) {
@@ -201,9 +194,9 @@ class CalendarConfiguration {
         return null;
     }
 
-    public void deleteSelectEve(String aDate, String starting) {
+    public void deleteChosenEvent(String aDate, String starting) {
         for(int i = 0; i < eventList.size(); i++) {
-            if(eventList.get(i).getDateStr().equalsIgnoreCase(aDate) && eventList.get(i).getStarting().equalsIgnoreCase(starting)) {
+            if(eventList.get(i).getDateStr().equalsIgnoreCase(aDate) && eventList.get(i).getBeginning().equalsIgnoreCase(starting)) {
                 eventList.remove(i);
                 for (ChangeListener l : listeners) {
                     l.stateChanged(new ChangeEvent(this));
@@ -211,15 +204,15 @@ class CalendarConfiguration {
             }
         }
     }
-
-    public void deleteEvent(String date)
-    {
-        for(int i = 0; i <eventList.size(); i++)
-        {
-            if(eventList.get(i).getDateStr().equalsIgnoreCase(date))
-            {
-                eventList.remove(i);
-            }
-        }
-    }
+//
+//    public void deleteEvent(String date)
+//    {
+//        for(int i = 0; i <eventList.size(); i++)
+//        {
+//            if(eventList.get(i).getDateStr().equalsIgnoreCase(date))
+//            {
+//                eventList.remove(i);
+//            }
+//        }
+//    }
 }

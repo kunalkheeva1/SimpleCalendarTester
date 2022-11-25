@@ -6,69 +6,69 @@ import java.io.Serializable;
 public class CalendarEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    String title;
-    Date date;
-    String starting;
-    String ending;
+    String heading;
+    Date dateBegin;
+    String beginning;
+    String finalizing;
 
-    public CalendarEvent(String title, String date, String s, String e) throws ParseException {
-        this.title = title;
+    public CalendarEvent(String heading, String dateBegin, String s, String e) throws ParseException {
+        this.heading = heading;
         SimpleDateFormat format = new SimpleDateFormat("M/d/yyyy");
-        this.date = format.parse(date);
-        this.starting = s;
-        this.ending = e;
+        this.dateBegin = format.parse(dateBegin);
+        this.beginning = s;
+        this.finalizing = e;
     }
 
-    public String getTitle() {
-        return title;
-    }
+//    public String getHeading() {
+//        return heading;
+//    }
+//
+//    public void setHeading(String heading) {
+//        this.heading = heading;
+//    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
 
-
-    public Date getDate() {
-        return date;
+    public Date getDateBegin() {
+        return dateBegin;
     }
 
 
 
     public String getDateStr() {
         SimpleDateFormat format = new SimpleDateFormat("M/d/yyyy");
-        return format.format(date);
+        return format.format(dateBegin);
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+//    public void setDateBegin(Date dateBegin) {
+//        this.dateBegin = dateBegin;
+//    }
+
+    public String getBeginning() {
+        return beginning;
     }
-
-    public String getStarting() {
-        return starting;
-    }
-
-    public void setStarting(String starting) {
-        this.starting = starting;
-    }
+//
+//    public void setBeginning(String beginning) {
+//        this.beginning = beginning;
+//    }
 
 
-    public String getEnding() {
-        return ending;
-    }
-
-
-    public void setEnding(String ending) {
-        this.ending = ending;
+    public String getFinalizing() {
+        return finalizing;
     }
 
 
-    public CalendarEvent() {
-        title = null;
-        date = null;
-        starting = null;
-        ending = null;
-    }
+//    public void setFinalizing(String finalizing) {
+//        this.finalizing = finalizing;
+//    }
+//
+//
+//    public CalendarEvent() {
+//        heading = null;
+//        dateBegin = null;
+//        beginning = null;
+//        finalizing = null;
+//    }
 
 
 
@@ -77,18 +77,18 @@ public class CalendarEvent implements Serializable {
         StringBuffer startingConvert = new StringBuffer();
         StringBuffer endingConvert = new StringBuffer();
         for(int i = 0; i < 7; i++) {
-            startingConvert.append(starting.charAt(i));
-            endingConvert.append(ending.charAt(i));
+            startingConvert.append(beginning.charAt(i));
+            endingConvert.append(finalizing.charAt(i));
         }
-        if(starting.charAt(5) == 'p') {
-            startingConvert.setCharAt(0, (char)(starting.charAt(0) - 1));
-            startingConvert.setCharAt(1, (char)(starting.charAt(1) - 2));
+        if(beginning.charAt(5) == 'p') {
+            startingConvert.setCharAt(0, (char)(beginning.charAt(0) - 1));
+            startingConvert.setCharAt(1, (char)(beginning.charAt(1) - 2));
         }
-        if(ending.charAt(5) == 'p') {
-            endingConvert.setCharAt(0, (char)(ending.charAt(0) - 1));
-            endingConvert.setCharAt(1, (char)(ending.charAt(1) - 2));
+        if(finalizing.charAt(5) == 'p') {
+            endingConvert.setCharAt(0, (char)(finalizing.charAt(0) - 1));
+            endingConvert.setCharAt(1, (char)(finalizing.charAt(1) - 2));
         }
-        objStr.append(startingConvert.toString() + " - " + endingConvert.toString() + "  " + title);
+        objStr.append(startingConvert.toString() + " - " + endingConvert.toString() + "  " + heading);
 
         return objStr.toString();
     }

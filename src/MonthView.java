@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.ParseException;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,189 +17,187 @@ import javax.swing.event.ChangeListener;
 public class MonthView extends JPanel implements ChangeListener {
 
 
-    public MonthView(JFrame closeFrame, int frameWidth, int frameHeight, int offSet, CalendarConfiguration modelCalendar) {
-        this.frameWidth = frameWidth;
-        this.frameHeight = frameHeight;
+    public MonthView(JFrame closeFrame, int frameBreadth, int frameLength, int offSet, CalendarConfiguration modelCalendar) {
+        this.frameBreadth = frameBreadth;
+        this.frameLength = frameLength;
         this.offSet = offSet;
         this.modelCalendar = modelCalendar;
-        this.presentDate = modelCalendar.actualDate();
-        this.presentMonth = modelCalendar.actualMonth();
-        this.presentYear = modelCalendar.actualYear();
-        this.currDatePos = modelCalendar.firstDayOfWeek() + presentDate + 5;
+        this.todayDate = modelCalendar.actualDate();
+        this.todayMonth = modelCalendar.actualMonth();
+        this.todayYear = modelCalendar.actualYear();
+        this.todayDatePros = modelCalendar.firstDayOfWeek() + todayDate + 5;
         this.closeFrame = closeFrame;
-        this.dateStr = new JTextField();
-        this.calBut = new JButton[49];
-        this.month = MONTHS.values();
+        this.dateString = new JTextField();
+        this.calButton = new JButton[49];
+        this.arrayMonths = MONTHS.values();
         draw();
     }
 
-    /**
-     * the draw method that handle all of the drawing
-     */
+
     private void draw() {
         String [] weekDay = {"Su", "M", "T", "W", "Th", "F", "Sa"};
 
         JPanel calendarPanel = new JPanel();
-        calendarPanel.setPreferredSize(new Dimension(frameWidth / 2, frameHeight));
+        calendarPanel.setPreferredSize(new Dimension(frameBreadth / 2, frameLength));
         calendarPanel.setBorder(BorderFactory.createLineBorder(Color.lightGray,3));
         this.add(calendarPanel);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setPreferredSize(new Dimension((int)calendarPanel.getPreferredSize().getWidth() - offSet,
+        JPanel buttonPnl = new JPanel();
+        buttonPnl.setPreferredSize(new Dimension((int)calendarPanel.getPreferredSize().getWidth() - offSet,
                 (int)calendarPanel.getPreferredSize().getHeight() / 4));
-        buttonPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY,3));
-        calendarPanel.add(buttonPanel);
+        buttonPnl.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY,3));
+        calendarPanel.add(buttonPnl);
 
         JPanel calendarPaneContent = new JPanel();
         calendarPaneContent.setPreferredSize(new Dimension((int)calendarPanel.getPreferredSize().getWidth() * 5 / 6, (int)calendarPanel.getPreferredSize().getHeight() * 3 / 4 - offSet));
         calendarPaneContent.setBorder(BorderFactory.createLineBorder(Color.darkGray));
         calendarPanel.add(calendarPaneContent);
 
-        JPanel upDownPanel = new JPanel();
-        upDownPanel.setPreferredSize(new Dimension((int)calendarPanel.getPreferredSize().getWidth() / 6 - offSet, (int)calendarPanel.getPreferredSize().getHeight() * 3 / 4 - offSet));
-        upDownPanel.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-        calendarPanel.add(upDownPanel);
+        JPanel bottom_And_Upside_pnl = new JPanel();
+        bottom_And_Upside_pnl.setPreferredSize(new Dimension((int)calendarPanel.getPreferredSize().getWidth() / 6 - offSet, (int)calendarPanel.getPreferredSize().getHeight() * 3 / 4 - offSet));
+        bottom_And_Upside_pnl.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+        calendarPanel.add(bottom_And_Upside_pnl);
         // Create add/ "create" button to add event
         // attach listener to it
-        JButton createBut = new JButton("Create");
-        createBut.setForeground(Color.white);
-        createBut.setBackground(Color.RED);
-        createBut.setOpaque(true);
-        createBut.setBorderPainted(false);
-        createBut.setPreferredSize(new Dimension((int)buttonPanel.getPreferredSize().getWidth() / 4 - offSet, (int)buttonPanel.getPreferredSize().getHeight() / 2));
-        createBut.addActionListener(new ActionListener() {
+        JButton jNewButton = new JButton("Create");
+        jNewButton.setForeground(Color.white);
+        jNewButton.setBackground(Color.RED);
+        jNewButton.setOpaque(true);
+        jNewButton.setBorderPainted(false);
+        jNewButton.setPreferredSize(new Dimension((int)buttonPnl.getPreferredSize().getWidth() / 4 - offSet, (int)buttonPnl.getPreferredSize().getHeight() / 2));
+        jNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame createFrame = new JFrame("Create an event");
-                createFrame.setSize(new Dimension(750, 150));
-                createFrame.setLayout(new FlowLayout());
-                JTextField eventTitle = new JTextField();
-                eventTitle.setPreferredSize(new Dimension(700, 50));
-                createFrame.add(eventTitle);
-                JTextField dateField = new JTextField();
-                dateField.setPreferredSize(new Dimension(100, 50));
-                dateField.setEditable(false);
-                dateField.setHorizontalAlignment(JTextField.CENTER);
-                dateField.setText((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear());
-                createFrame.add(dateField);
-                JTextField startField = new JTextField();
-                startField.setPreferredSize(new Dimension(150, 50));
-                startField.setHorizontalAlignment(JTextField.CENTER);
-                startField.setText("--:-- am/pm");
-                createFrame.add(startField);
-                JTextField toField = new JTextField();
-                toField.setPreferredSize(new Dimension(40, 40));
-                toField.setHorizontalAlignment(JTextField.CENTER);
-                toField.setBorder(BorderFactory.createEmptyBorder());
-                toField.setEditable(false);
-                toField.setText("to");
-                createFrame.add(toField);
-                JTextField endField = new JTextField();
-                endField.setPreferredSize(new Dimension(150, 50));
-                endField.setHorizontalAlignment(JTextField.CENTER);
-                endField.setText("--:-- am/pm");
-                createFrame.add(endField);
-                JButton saveButton = new JButton("Save");
-                saveButton.setForeground(Color.white);
-                saveButton.setPreferredSize(new Dimension(150, 40));
-                saveButton.setBackground(Color.RED);
-                saveButton.setOpaque(true);
-                saveButton.setBorderPainted(false);
-                JFrame errorFrame = new JFrame("Time conflict");
-                JTextField errorField = new JTextField();
-                errorField.setPreferredSize(new Dimension(500, 50));
-                errorField.setEditable(false);
-                errorFrame.add(errorField);
-                errorFrame.pack();
-                saveButton.addActionListener(new ActionListener() {
+                JFrame build_Frame = new JFrame("Create an event");
+                build_Frame.setSize(new Dimension(800, 200));
+                build_Frame.setLayout(new FlowLayout());
+                JTextField eventName = new JTextField();
+                eventName.setPreferredSize(new Dimension(800, 70));
+                build_Frame.add(eventName);
+                JTextField dateArea = new JTextField();
+                dateArea.setPreferredSize(new Dimension(110, 70));
+                dateArea.setEditable(false);
+                dateArea.setHorizontalAlignment(JTextField.CENTER);
+                dateArea.setText((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear());
+                build_Frame.add(dateArea);
+                JTextField begin_With_Field = new JTextField();
+                begin_With_Field.setPreferredSize(new Dimension(150, 50));
+                begin_With_Field.setHorizontalAlignment(JTextField.CENTER);
+                begin_With_Field.setText("--:-- am/pm");
+                build_Frame.add(begin_With_Field);
+                JTextField nextField = new JTextField();
+                nextField.setPreferredSize(new Dimension(40, 40));
+                nextField.setHorizontalAlignment(JTextField.CENTER);
+                nextField.setBorder(BorderFactory.createEmptyBorder());
+                nextField.setEditable(false);
+                nextField.setText("to");
+                build_Frame.add(nextField);
+                JTextField finalField = new JTextField();
+                finalField.setPreferredSize(new Dimension(150, 50));
+                finalField.setHorizontalAlignment(JTextField.CENTER);
+                finalField.setText("--:-- am/pm");
+                build_Frame.add(finalField);
+                JButton jButton = new JButton("Save!");
+                jButton.setForeground(Color.WHITE);
+                jButton.setPreferredSize(new Dimension(150, 40));
+                jButton.setBackground(Color.GREEN);
+                jButton.setOpaque(true);
+                jButton.setBorderPainted(false);
+                JFrame frameHoldError = new JFrame("Time Mismatch!");
+                JTextField error_Text_Field = new JTextField();
+                error_Text_Field.setPreferredSize(new Dimension(500, 50));
+                error_Text_Field.setEditable(false);
+                frameHoldError.add(error_Text_Field);
+                frameHoldError.pack();
+                jButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             String error;
-                            if((error = modelCalendar.addEvent(eventTitle.getText(), dateField.getText(), startField.getText(), endField.getText())) != null) {
-                                errorField.setText(error);
-                                errorFrame.setVisible(true);
+                            if((error = modelCalendar.addEvent(eventName.getText(), dateArea.getText(), begin_With_Field.getText(), finalField.getText())) != null) {
+                                error_Text_Field.setText(error);
+                                frameHoldError.setVisible(true);
                             }
                             else {
-                                createFrame.dispose();
-                                errorFrame.dispose();
+                                build_Frame.dispose();
+                                frameHoldError.dispose();
                             }
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
                     }
                 });
-                createFrame.add(saveButton);
-                createFrame.setVisible(true);
+                build_Frame.add(jButton);
+                build_Frame.setVisible(true);
             }
         });
-        buttonPanel.add(createBut);
+        buttonPnl.add(jNewButton);
 
-        JButton delBut = new JButton("Delete");
-        delBut.setPreferredSize(new Dimension((int)buttonPanel.getPreferredSize().getWidth() / 4 - offSet, (int)buttonPanel.getPreferredSize().getHeight() / 2));
-        delBut.setForeground(Color.white);
-        delBut.setBackground(Color.BLACK);
-        delBut.setOpaque(true);
-        delBut.setBorderPainted(false);
-        buttonPanel.add(delBut);
+        JButton jButtonDelete = new JButton("Delete");
+        jButtonDelete.setPreferredSize(new Dimension((int)buttonPnl.getPreferredSize().getWidth() / 4 - offSet, (int)buttonPnl.getPreferredSize().getHeight() / 2));
+        jButtonDelete.setForeground(Color.white);
+        jButtonDelete.setBackground(Color.BLACK);
+        jButtonDelete.setOpaque(true);
+        jButtonDelete.setBorderPainted(false);
+        buttonPnl.add(jButtonDelete);
 
-        delBut.addActionListener(new ActionListener()
+        jButtonDelete.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame delFrame = new JFrame("Delete an event");
-                delFrame.setSize(new Dimension(750, 150));
-                delFrame.setLayout(new FlowLayout());
-                JTextField eventTitle = new JTextField();
-                eventTitle.setPreferredSize(new Dimension(700, 50));
-                delFrame.add(eventTitle);
-                JTextField dateField = new JTextField();
-                dateField.setPreferredSize(new Dimension(100, 50));
-                dateField.setEditable(false);
-                dateField.setHorizontalAlignment(JTextField.CENTER);
-                dateField.setText((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear());
-                delFrame.add(dateField);
-                JTextField startField = new JTextField();
-                startField.setPreferredSize(new Dimension(150, 50));
-                startField.setHorizontalAlignment(JTextField.CENTER);
-                startField.setText("--:-- am/pm");
-                delFrame.add(startField);
-                JTextField toField = new JTextField();
-                toField.setPreferredSize(new Dimension(40, 40));
-                toField.setHorizontalAlignment(JTextField.CENTER);
-                toField.setBorder(BorderFactory.createEmptyBorder());
-                toField.setEditable(false);
-                toField.setText("to");
-                delFrame.add(toField);
-                JTextField endField = new JTextField();
-                endField.setPreferredSize(new Dimension(150, 50));
-                endField.setHorizontalAlignment(JTextField.CENTER);
-                endField.setText("--:-- am/pm");
-                delFrame.add(endField);
-                JButton dButton = new JButton("Delete");
-                dButton.setForeground(Color.white);
-                dButton.setPreferredSize(new Dimension(150, 40));
-                dButton.setBackground(Color.BLACK);
-                dButton.setOpaque(true);
-                dButton.setBorderPainted(false);
+                JFrame jFrameDelete = new JFrame("Delete an event");
+                jFrameDelete.setSize(new Dimension(750, 150));
+                jFrameDelete.setLayout(new FlowLayout());
+                JTextField eventHeading = new JTextField();
+                eventHeading.setPreferredSize(new Dimension(700, 50));
+                jFrameDelete.add(eventHeading);
+                JTextField jTextDateField = new JTextField();
+                jTextDateField.setPreferredSize(new Dimension(100, 50));
+                jTextDateField.setEditable(false);
+                jTextDateField.setHorizontalAlignment(JTextField.CENTER);
+                jTextDateField.setText((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear());
+                jFrameDelete.add(jTextDateField);
+                JTextField beginInitialField = new JTextField();
+                beginInitialField.setPreferredSize(new Dimension(150, 50));
+                beginInitialField.setHorizontalAlignment(JTextField.CENTER);
+                beginInitialField.setText("--:-- am/pm");
+                jFrameDelete.add(beginInitialField);
+                JTextField destinyField = new JTextField();
+                destinyField.setPreferredSize(new Dimension(40, 40));
+                destinyField.setHorizontalAlignment(JTextField.CENTER);
+                destinyField.setBorder(BorderFactory.createEmptyBorder());
+                destinyField.setEditable(false);
+                destinyField.setText("to");
+                jFrameDelete.add(destinyField);
+                JTextField sourceField = new JTextField();
+                sourceField.setPreferredSize(new Dimension(150, 50));
+                sourceField.setHorizontalAlignment(JTextField.CENTER);
+                sourceField.setText("--:-- am/pm");
+                jFrameDelete.add(sourceField);
+                JButton jDeleteButton = new JButton("Delete!!");
+                jDeleteButton.setForeground(Color.white);
+                jDeleteButton.setPreferredSize(new Dimension(150, 40));
+                jDeleteButton.setBackground(Color.BLACK);
+                jDeleteButton.setOpaque(true);
+                jDeleteButton.setBorderPainted(false);
 
 
-                dButton.addActionListener(new ActionListener() {
+                jDeleteButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        modelCalendar.deleteSelectEve(dateField.getText(), startField.getText());
-                        delFrame.dispose();
+                        modelCalendar.deleteChosenEvent(jTextDateField.getText(), beginInitialField.getText());
+                        jFrameDelete.dispose();
 
                     }
                 });
-                delFrame.add(dButton);
-                delFrame.setVisible(true);
+                jFrameDelete.add(jDeleteButton);
+                jFrameDelete.setVisible(true);
             }
 
         });
 
 
-        JButton quitBut = new JButton("Quit");
-        quitBut.setPreferredSize(new Dimension((int)buttonPanel.getPreferredSize().getWidth() / 4 - offSet, (int)buttonPanel.getPreferredSize().getHeight() / 2));
-        quitBut.addActionListener(new ActionListener() {
+        JButton jQuitButton = new JButton("Quit!!");
+        jQuitButton.setPreferredSize(new Dimension((int)buttonPnl.getPreferredSize().getWidth() / 4 - offSet, (int)buttonPnl.getPreferredSize().getHeight() / 2));
+        jQuitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -212,146 +209,147 @@ public class MonthView extends JPanel implements ChangeListener {
                 }
             }
         });
-        quitBut.setPreferredSize(new Dimension(150,75));
-        quitBut.setBackground(Color.GREEN);
-        quitBut.setForeground(Color.white);
-        quitBut.setOpaque(true);
-        quitBut.setBorderPainted(false);
+        jQuitButton.setPreferredSize(new Dimension(150,75));
+        jQuitButton.setBackground(Color.GREEN);
+        jQuitButton.setForeground(Color.white);
+        jQuitButton.setOpaque(true);
+        jQuitButton.setBorderPainted(false);
 
 
 
-        buttonPanel.add(quitBut);
-        JButton prevBut = new JButton("<Previous");
-        prevBut.setPreferredSize(new Dimension((int)buttonPanel.getPreferredSize().getWidth() / 2 - offSet, (int)buttonPanel.getPreferredSize().getHeight() / 2 - offSet));
-        prevBut.addActionListener(new ActionListener() {
+        buttonPnl.add(jQuitButton);
+        JButton jPreviousButton = new JButton("<Previous");
+        jPreviousButton.setPreferredSize(new Dimension((int)buttonPnl.getPreferredSize().getWidth() / 2 - offSet, (int)buttonPnl.getPreferredSize().getHeight() / 2 - offSet));
+        jPreviousButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(modelCalendar.hasEvent((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear()))
-                    calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(Color.CYAN);
+                if(modelCalendar.checkEvent((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear()))
+                    calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(Color.CYAN);
                 else
-                    calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(null);
+                    calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(null);
                 modelCalendar.buttonUpdate(-1, 0);
             }
         });
-        buttonPanel.add(prevBut);
+        buttonPnl.add(jPreviousButton);
 
-        JButton nextBut = new JButton("Next>");
-        nextBut.setPreferredSize(new Dimension((int)buttonPanel.getPreferredSize().getWidth() / 2 - offSet, (int)buttonPanel.getPreferredSize().getHeight() / 2 - offSet));
-        nextBut.addActionListener(new ActionListener() {
+        JButton jNextButton = new JButton("Next>");
+        jNextButton.setPreferredSize(new Dimension((int)buttonPnl.getPreferredSize().getWidth() / 2 - offSet, (int)buttonPnl.getPreferredSize().getHeight() / 2 - offSet));
+        jNextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(modelCalendar.hasEvent((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear()))
-                    calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(Color.CYAN);
+                if(modelCalendar.checkEvent((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear()))
+                    calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(Color.CYAN);
                 else
-                    calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(null);
+                    calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(null);
                 modelCalendar.buttonUpdate(1, 0);
             }
         });
-        buttonPanel.add(nextBut);
-        // upButton to move up the calendar monthview
-        JButton upBut = new JButton("Up");
-        upBut.setPreferredSize(new Dimension((int)upDownPanel.getPreferredSize().getWidth() - offSet / 2, (int)upDownPanel.getPreferredSize().getHeight() / 2 - offSet));
-        upBut.addActionListener(new ActionListener() {
+        buttonPnl.add(jNextButton);
+
+
+        JButton upperJButton = new JButton("Up");
+        upperJButton.setPreferredSize(new Dimension((int)bottom_And_Upside_pnl.getPreferredSize().getWidth() - offSet / 2, (int)bottom_And_Upside_pnl.getPreferredSize().getHeight() / 2 - offSet));
+        upperJButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(null);
+                calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(null);
                 modelCalendar.buttonUpdate(0, -1);
             }
         });
-        upDownPanel.add(upBut);
+        bottom_And_Upside_pnl.add(upperJButton);
 
-        JButton downBut = new JButton("Dn");
-        downBut.setPreferredSize(new Dimension((int)upDownPanel.getPreferredSize().getWidth() - offSet / 2, (int)upDownPanel.getPreferredSize().getHeight() / 2 - offSet));
-        downBut.addActionListener(new ActionListener() {
+        JButton jBottomButton = new JButton("Bottom");
+        jBottomButton.setPreferredSize(new Dimension((int)bottom_And_Upside_pnl.getPreferredSize().getWidth() - offSet / 2, (int)bottom_And_Upside_pnl.getPreferredSize().getHeight() / 2 - offSet));
+        jBottomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(null);
+                calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(null);
                 modelCalendar.buttonUpdate(0, 1);
             }
         });
-        upDownPanel.add(downBut);
+        bottom_And_Upside_pnl.add(jBottomButton);
 
-        dateStr.setPreferredSize(new Dimension((int)calendarPaneContent.getPreferredSize().getWidth() - offSet / 3, (int)calendarPaneContent.getPreferredSize().getHeight() / 8 - offSet / 3));
-        dateStr.setEditable(false);
-        dateStr.setHorizontalAlignment(JTextField.CENTER);
-        calendarPaneContent.add(dateStr);
+        dateString.setPreferredSize(new Dimension((int)calendarPaneContent.getPreferredSize().getWidth() - offSet / 3, (int)calendarPaneContent.getPreferredSize().getHeight() / 8 - offSet / 3));
+        dateString.setEditable(false);
+        dateString.setHorizontalAlignment(JTextField.CENTER);
+        calendarPaneContent.add(dateString);
 
-        final int CAL_BUT_WIDTH = (int)calendarPaneContent.getPreferredSize().getWidth() / 7 - offSet / 3;
-        final int CAL_BUT_HEIGHT = (int)calendarPaneContent.getPreferredSize().getHeight() / 8 - offSet / 3;
+        final int CAL_BUTTON_WIDTH = (int)calendarPaneContent.getPreferredSize().getWidth() / 7 - offSet / 3;
+        final int CAL_BUTTON_HEIGHT = (int)calendarPaneContent.getPreferredSize().getHeight() / 8 - offSet / 3;
 
         ActionListener onClick = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(modelCalendar.hasEvent((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear()))
-                    calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(Color.CYAN);
+                if(modelCalendar.checkEvent((modelCalendar.actualMonth() + 1) + "/" + modelCalendar.actualDate() + "/" + modelCalendar.actualYear()))
+                    calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(Color.CYAN);
                 else
-                    calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(null);
+                    calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(null);
                 JButton clickedButton = (JButton)(e.getSource());
                 modelCalendar.setDate(clickedButton.getText());
             }
         };
 
-        for(int i = 0; i < calBut.length; i++) {
+        for(int i = 0; i < calButton.length; i++) {
             if (i < 7)
-                calBut[i] = new JButton(weekDay[i]);
+                calButton[i] = new JButton(weekDay[i]);
             else {
-                calBut[i] = new JButton();
-                calBut[i].addActionListener(onClick);
+                calButton[i] = new JButton();
+                calButton[i].addActionListener(onClick);
             }
-            calBut[i].setPreferredSize(new Dimension(CAL_BUT_WIDTH, CAL_BUT_HEIGHT));
-            calendarPaneContent.add(calBut[i]);
+            calButton[i].setPreferredSize(new Dimension(CAL_BUTTON_WIDTH, CAL_BUTTON_HEIGHT));
+            calendarPaneContent.add(calButton[i]);
         }
 
-        populateCal();
-        calBut[currDatePos].setBorder(BorderFactory.createTitledBorder("C"));
-        calBut[currDatePos].setBackground(Color.ORANGE);
+        inhabitCal();
+        calButton[todayDatePros].setBorder(BorderFactory.createTitledBorder("C"));
+        calButton[todayDatePros].setBackground(Color.ORANGE);
     }
 
-    private void populateCal() {
-        int firstDayOfWeek = modelCalendar.firstDayOfWeek() + 6;
-        int lastDayOfMonth = modelCalendar.lastDayOfMonth();
+    private void inhabitCal() {
+        int ist_Week_Day = modelCalendar.firstDayOfWeek() + 6;
+        int monthEndDay = modelCalendar.lastDayOfMonth();
 
-        dateStr.setText(month[modelCalendar.actualMonth()].toString() + ' ' + modelCalendar.actualYear());
-        for(int i = 7; i < firstDayOfWeek; i++)
-            calBut[i].setText(null);
-        for(int i = firstDayOfWeek + lastDayOfMonth; i < calBut.length; i++)
-            calBut[i].setText(null);
-        for(int i = 0; i < lastDayOfMonth; i++) {
-            if(presentMonth == modelCalendar.currentMonth() && presentYear == modelCalendar.currentYear())
-                calBut[currDatePos].setBorder(BorderFactory.createTitledBorder("C"));
-            if(modelCalendar.hasEvent((modelCalendar.actualMonth() + 1) + "/" + Integer.toString(i + 1) + "/" + modelCalendar.actualYear()))
-                calBut[modelCalendar.firstDayOfWeek() + 5 + i + 1].setBackground(Color.CYAN);
+        dateString.setText(arrayMonths[modelCalendar.actualMonth()].toString() + ' ' + modelCalendar.actualYear());
+        for(int i = 7; i < ist_Week_Day; i++)
+            calButton[i].setText(null);
+        for(int i = ist_Week_Day + monthEndDay; i < calButton.length; i++)
+            calButton[i].setText(null);
+        for(int i = 0; i < monthEndDay; i++) {
+            if(todayMonth == modelCalendar.currentMonth() && todayYear == modelCalendar.currentYear())
+                calButton[todayDatePros].setBorder(BorderFactory.createTitledBorder("C"));
+            if(modelCalendar.checkEvent((modelCalendar.actualMonth() + 1) + "/" + Integer.toString(i + 1) + "/" + modelCalendar.actualYear()))
+                calButton[modelCalendar.firstDayOfWeek() + 5 + i + 1].setBackground(Color.CYAN);
             else
-                calBut[modelCalendar.firstDayOfWeek() + 5 + i + 1].setBackground(null);
-            calBut[firstDayOfWeek].setText(Integer.toString(i + 1));
-            firstDayOfWeek++;
+                calButton[modelCalendar.firstDayOfWeek() + 5 + i + 1].setBackground(null);
+            calButton[ist_Week_Day].setText(Integer.toString(i + 1));
+            ist_Week_Day++;
         }
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        if(presentMonth != modelCalendar.actualMonth()) {
-            presentMonth = modelCalendar.actualMonth();
-            presentYear = modelCalendar.actualYear();
-            calBut[currDatePos].setBorder(UIManager.getBorder("Button.border"));
-            populateCal();
+        if(todayMonth != modelCalendar.actualMonth()) {
+            todayMonth = modelCalendar.actualMonth();
+            todayYear = modelCalendar.actualYear();
+            calButton[todayDatePros].setBorder(UIManager.getBorder("Button.border"));
+            inhabitCal();
         }
-        presentDate = modelCalendar.actualDate();
-        calBut[modelCalendar.firstDayOfWeek() + 5 + presentDate].setBackground(Color.ORANGE);
+        todayDate = modelCalendar.actualDate();
+        calButton[modelCalendar.firstDayOfWeek() + 5 + todayDate].setBackground(Color.ORANGE);
     }
     private static final long serialVersionUID = 1L;
-    // variables for frameWidth, Height,offSet and calendar stuffs
-    private int frameWidth;
-    private int frameHeight;
+
+    private int frameBreadth;
+    private int frameLength;
     private int offSet;
-    private int presentDate;
-    private int presentMonth;
-    private int presentYear;
-    private int currDatePos;
-    // reference to the model is here
+    private int todayDate;
+    private int todayMonth;
+    private int todayYear;
+    private int todayDatePros;
+
     private CalendarConfiguration modelCalendar;
     private JFrame closeFrame;
-    private JButton [] calBut; //array of JButton for calendar/date
-    private JTextField dateStr;
-    private MONTHS [] month;
+    private JButton [] calButton;
+    private JTextField dateString;
+    private MONTHS [] arrayMonths;
 }

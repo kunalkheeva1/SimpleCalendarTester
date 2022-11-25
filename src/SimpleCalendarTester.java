@@ -5,4 +5,5 @@ public class SimpleCalendarTester {
     public static void main(String[] args) throws ClassNotFoundException, IOException, ParseException {
         new GUI();
     }
+
 }

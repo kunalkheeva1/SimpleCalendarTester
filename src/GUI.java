@@ -27,8 +27,8 @@ public class GUI {
         MonthView monthView = new MonthView(calendarFrame, FRAME_WIDTH, FRAME_HEIGHT, OFFSET, modelCalendar);
         DayView dayView = new DayView(FRAME_WIDTH, FRAME_HEIGHT, modelCalendar);
 
-        modelCalendar.attachView(monthView);
-        modelCalendar.attachView(dayView);
+        modelCalendar.attach_View_Total(monthView);
+        modelCalendar.attach_View_Total(dayView);
 
         calendarFrame.setLayout(new BoxLayout(calendarFrame.getContentPane(),BoxLayout.X_AXIS));
         calendarFrame.add(dayView);
